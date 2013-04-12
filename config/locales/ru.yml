@@ -1,0 +1,31 @@
+# Russian strings
+ru:
+  label_enable_http_auth: Включить аутентификацию на основе серверной переменной REMOTE_USER
+  label_server_env_var: Имя серверной переменной окружения
+  label_default: по умолчанию
+  label_lookup_mode: Способ поиска пользователя
+  label_login_name: имя пользователя
+  label_email_address: адрес электронной почты
+  login_httpauth_title: Входить через HTTP-Auth
+  label_enable_auto_registration: Автоматическая регистрация
+  label_autoregister: Регистрация
+  error_autoregistration_disabled: Автоматическая регистрация отключена
+  error_remote_user_unset: Имя пользователя не указано
+  error_unknown_user: Пользователь не найден в базе данных
+  label_keep_sessions: Оставлять сессии redmine открытыми после потери HTTP authentication (опасно!)
+  label_sync_users_from_ldap: Синхронизировать пользователей из LDAP
+  label_sync_groups_from_ldap: Синхронизировать группы из LDAP
+  label_ldap_rm_group_name_attr: Атрибут LDAP в котором должно быть прописано имя группы в Redmine
+  http_auth_h2_ref: Настройка ассоциаций груп с LDAP
+  field_group: Группа Redmine
+  field_ldap_group_name: Группа LDAP
+  http_auth_button_create: Создать ассоциацию
+  http_auth_create_apply: Новая ассоциация создана
+  http_auth_uniqueness: Такая ассоциация уже существует
+  http_auth_h3_list: Список существующих ассоциации
+  http_auth_h3_add: Добавление новой ассоциации
+  http_auth_create_delete: Ассоциация удалена
+  label_sync_groups_by_ass: Синхронизировать группы на основе ассоциаций
+  http_auth_delete_quest: Точно удалить?
+  http_auth_delete: Удалить 
+  

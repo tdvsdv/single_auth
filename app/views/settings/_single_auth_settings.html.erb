@@ -1,0 +1,35 @@
+<table cellspacing="15">
+<tr>
+<td><%=l(:label_enable_http_auth)%></td>
+<td><%=check_box_tag 'settings[enable]', true, @settings['enable'] == "true" %></td>
+</tr>
+
+<tr>
+<td><%=l(:label_server_env_var)%></td>
+<td><%=text_field_tag 'settings[server_env_var]', @settings['server_env_var'] %></td>
+</tr>
+
+<tr>
+<td><%=l(:label_sync_users_from_ldap)%></td>
+<td><%=check_box_tag 'settings[sync_users_from_ldap]', true, @settings['sync_users_from_ldap'] == "true" %></td>
+</tr>
+
+<tr>
+<td><%=l(:label_sync_groups_from_ldap)%></td>
+<td><%=check_box_tag 'settings[sync_groups_from_ldap]', true, @settings['sync_groups_from_ldap'] == "true" %></td>
+</tr>
+
+<tr>
+<td><%=l(:label_sync_groups_by_ass)%></td>
+<td><%=check_box_tag 'settings[sync_groups_by_ass]', true, @settings['sync_groups_by_ass'] == "true" %></td>
+</tr>
+
+<tr>
+<td><%= link_to "Настройка ассоциаций групп", :controller => "ldapgroups", :action => "index" %></td>
+<td></td>
+</tr>
+
+</table>
+
+
+
