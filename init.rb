@@ -20,12 +20,6 @@ Redmine::Plugin.register :single_auth do
       'keep_sessions' => 'false',
       'sync_groups_by_ass' => 'false'
     }
-	
-	delete_menu_item :account_menu, :login
-	delete_menu_item :account_menu, :my_account
-	#delete_menu_item :account_menu, :logout
-	
-	menu :account_menu, :my_name, { :controller => 'my', :action => 'account' }, :caption => Proc.new { User.current.name },  :if => Proc.new { User.current.logged? }
 end
 
 Rails.application.config.to_prepare do

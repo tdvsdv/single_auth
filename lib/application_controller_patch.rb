@@ -37,7 +37,7 @@ module ApplicationControllerPatch
 				#flash[:error]="sadasdasd";
 				if current_user.nil?
 					#flash[:error]="ssssssssss"+session[:user_id].to_s;
-					if ! remote_username.nil?
+					if not remote_username.nil?
 						try_login remote_username
 					else
 						return current_user 
