@@ -10,22 +10,13 @@ Redmine::Plugin.register :single_auth do
 
   settings :partial => 'settings/single_auth_settings',
     :default => {
-      'enable' => 'true',
       'server_env_var' => 'REMOTE_USER',
-      'lookup_mode' => 'login',
-      'auto_registration' => 'true',
-      'sync_users_from_ldap' => 'true',
-      'sync_groups_from_ldap' => 'true',
-      'ldap_rm_group_name_attr' => 'displayname',
-      'keep_sessions' => 'false',
-      'sync_groups_by_ass' => 'false'
-    }
+      }
 end
 
 Rails.application.config.to_prepare do
   #include our code
   ApplicationController.send(:include, ApplicationControllerPatch)
-  Group.send(:include, AutoFieldsGroupPatch)
 end
 
 require 'single_auth/view_hooks'
