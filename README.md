@@ -44,3 +44,5 @@ Plugin aims to support and is tested under the following Rails implementations:
 
 #### Copyright
 Copyright (c) 2011-2013 Vladimir Pitin, Danil Kukhlevskiy.
+
+Another plugins of our team you can see on site http://rmplus.pro
