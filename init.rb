@@ -1,5 +1,5 @@
 require 'redmine'
- 
+
 Redmine::Plugin.register :single_auth do
   name 'Single authentification plugin'
   author 'Pitin Vladimir Vladimirovich'
@@ -15,8 +15,7 @@ Redmine::Plugin.register :single_auth do
 end
 
 Rails.application.config.to_prepare do
-  #include our code
-  ApplicationController.send(:include, ApplicationControllerPatch)
+  ApplicationController.send(:include, SingleAuth::ApplicationControllerPatch)
 end
 
 require 'single_auth/view_hooks'
