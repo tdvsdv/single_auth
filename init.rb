@@ -16,6 +16,7 @@ end
 
 Rails.application.config.to_prepare do
   ApplicationController.send(:include, SingleAuth::ApplicationControllerPatch)
+  AccountController.send(:include, SingleAuth::AccountControllerPatch)
 end
 
 require 'single_auth/view_hooks'
