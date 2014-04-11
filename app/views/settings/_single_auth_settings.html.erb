@@ -1,12 +1,25 @@
+<% defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default] %>
+<% @settings = defaults.merge(@settings) %>
+<% groups = Group.all %>
+
 <table cellspacing="15">
 
-
-<tr>
-<td><%=l(:label_server_env_var)%></td>
-<td><%=text_field_tag 'settings[server_env_var]', @settings['server_env_var'] %></td>
-</tr>
+  <tr>
+    <td><%=l(:label_server_env_var)%></td>
+    <td><%=text_field_tag 'settings[server_env_var]', @settings['server_env_var'] %></td>
+  </tr>
+  <tr>
+    <td><%= l(:settings_enable_sms_auth) %></td>
+    <td><%= check_box_tag 'settings[enable_sms_auth]', true, @settings['enable_sms_auth'], :size => 50 %></td>
+  </tr>
+  <tr>
+    <td><%= l(:settings_logout_timeout) %></td>
+    <td><%= text_field_tag 'settings[logout_timeout]', @settings['logout_timeout'] %></td>
+  </tr>
+  <tr>
+    <td><%= l(:settings_user_groups_whitelist) %></td>
+    <td><%=select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, "id", "name", user_to_profile_ids), { :class => 'select2', :multiple => '' } %>
+    </td>
+  </tr>
 
 </table>
-
-
-
