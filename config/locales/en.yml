@@ -1,3 +1,7 @@
 # English strings
 en:
   label_server_env_var: Name of server environment variable
+  settings_enable_sms_auth: "Enable two-factor authentication"
+  settings_logout_timeout: "Idle time before automatic logout"
+  settings_user_groups_whitelist: "These user groups doesn't require two-factor authentication"
+  settings_ip_whitelist: "These ip addresses doesn't require two-factor authentication"

@@ -1,4 +1,1 @@
 <%= stylesheet_link_tag :single_auth_all_head, :plugin => :single_auth %>
-<% if (!controller.nil? && controller.controller_name == 'settings' && controller.action_name == 'plugin') && params[:id] == 'single_auth' %>
-  <%= javascript_include_tag 'auth_settings.js', :plugin => :single_auth %>
-<% end %>

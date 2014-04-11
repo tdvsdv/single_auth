@@ -1,5 +1,5 @@
 <% defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default] %>
-<% @settings = defaults.merge(@settings) %>
+<% @settings = @settings.merge(defaults) %>
 <% groups = Group.all %>
 
 <table cellspacing="15">
@@ -18,8 +18,12 @@
   </tr>
   <tr>
     <td><%= l(:settings_user_groups_whitelist) %></td>
-    <td><%=select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, "id", "name", user_to_profile_ids), { :class => 'select2', :multiple => '' } %>
+    <td><%= select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, "id", "name", @settings[:user_groups_whitelist]), { :class => 'select2', :multiple => '' } %>
     </td>
+  </tr>
+  <tr>
+    <td><%= l(:settings_ip_whitelist) %></td>
+    <td><%= text_field_tag 'settings[ip_whitelist]', @settings[:ip_whitelist], :size => 50 %></td>
   </tr>
 
 </table>
