@@ -1,28 +1,34 @@
 <% defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default] %>
-<% @settings = @settings.merge(defaults) %>
+<%# @settings = @settings.merge(defaults) %>
 <% groups = Group.all %>
 
 <table cellspacing="15">
-
   <tr>
-    <td><%=l(:label_server_env_var)%></td>
+    <td><%=l(:label_server_env_var)%>:</td>
     <td><%=text_field_tag 'settings[server_env_var]', @settings['server_env_var'] %></td>
   </tr>
   <tr>
-    <td><%= l(:settings_enable_sms_auth) %></td>
+    <td><%= l(:settings_enable_sms_auth) %>:</td>
     <td><%= check_box_tag 'settings[enable_sms_auth]', true, @settings['enable_sms_auth'], :size => 50 %></td>
   </tr>
   <tr>
-    <td><%= l(:settings_logout_timeout) %></td>
+    <td><%= l(:settings_intranet_domains) %>:</td>
+    <td>
+      <input id="intranet_domains" name="settings[intranet_domains][]" multiple="multiple" type="hidden" style="width: 400px;"></input>
+    </td>
+  </tr>
+
+  <tr>
+    <td><%= l(:settings_logout_timeout) %>:</td>
     <td><%= text_field_tag 'settings[logout_timeout]', @settings['logout_timeout'] %></td>
   </tr>
   <tr>
-    <td><%= l(:settings_user_groups_whitelist) %></td>
+    <td><%= l(:settings_user_groups_whitelist) %>:</td>
     <td><%= select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, "id", "name", @settings[:user_groups_whitelist]), { :class => 'select2', :multiple => '' } %>
     </td>
   </tr>
   <tr>
-    <td><%= l(:settings_ip_whitelist) %></td>
+    <td><%= l(:settings_ip_whitelist) %>:</td>
     <td><%= text_field_tag 'settings[ip_whitelist]', @settings[:ip_whitelist], :size => 50 %></td>
   </tr>
 

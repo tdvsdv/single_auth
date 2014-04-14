@@ -11,7 +11,9 @@ Redmine::Plugin.register :single_auth do
   settings :partial => 'settings/single_auth_settings',
     :default => {
       'server_env_var' => 'REMOTE_USER',
-      :logout_timeout => 5*60 # timeout before logging inactive user out, in seconds
+      # timeout before logging inactive user out, in seconds
+      :logout_timeout => 5*60,
+      :intranet_domains => ['rm.prp.ru', 'rm.local', 'redmine.local']
       }
 end
 

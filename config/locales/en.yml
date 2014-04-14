@@ -5,3 +5,4 @@ en:
   settings_logout_timeout: "Idle time before automatic logout"
   settings_user_groups_whitelist: "These user groups doesn't require two-factor authentication"
   settings_ip_whitelist: "These ip addresses doesn't require two-factor authentication"
+  settings_intranet_domains: "Trusted domains list (intranet domains)"

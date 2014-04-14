@@ -1,1 +1,25 @@
 <%= stylesheet_link_tag :single_auth_all_head, :plugin => :single_auth %>
+<% if (!controller.nil? && controller.controller_name == 'settings' && controller.action_name == 'plugin') && params[:id] == 'single_auth' %>
+
+  <script type="text/javascript">
+  // <![CDATA[
+    RMPlus.SingleAuth = (function(my){
+      var my = my || {};
+
+      my.intranet_domains_values = <%= @settings[:intranet_domains].to_json.html_safe %>;
+
+      my.format = function(item){
+        return item.tag;
+      }
+
+      my.intranet_domains = [];
+      for (i=0; i < my.intranet_domains_values.length; i++){
+        my.intranet_domains[i] = {id: my.intranet_domains_values[i], text: my.intranet_domains_values[i]};
+      }
+
+      return my;
+  })(RMPlus.SingleAuth || {});
+  // ]]>
+  </script>
+  <%= javascript_include_tag 'single_auth', :plugin => 'single_auth' %>
+<% end %>
