@@ -24,18 +24,13 @@ module SingleAuth
         logger.debug("domain=#{request.domain}")
         logger.debug("ip=#{request.remote_ip}")
         logger.debug("dsfdf=#{Setting.plugin_single_auth[:intranet_domains]}")
-        if Setting.plugin_single_auth[:enable_sms_auth]
-          if user.respond_to?("user_phones") & defined?(UserPhone)
+        enable_sms_auth = Setting.plugin_single_auth[:enable_sms_auth]
+        intranet_domains = Setting.plugin_single_auth[:intranet_domains]
+        ip_whitelist = Setting.plugin_single_auth[:ip_whitelist]
+        user_groups_whitelist = Setting.plugin_single_auth[:user_groups_whitelist]
+        if enable_sms_auth && (user.respond_to?("user_phones") && defined?(UserPhone)) && (user.groups.map{|group| group.id} & user_groups_whitelist).count == 0
+          unless intranet_domains.include?(request.domain) && ip_whitelist.include?(request.remote_ip)
 
-            #request.remote_ip
-
-            user_groups_whitelist = Setting.plugin_single_auth[:user_groups_whitelist]
-
-            if (user.groups.map{|group| group.id} & user_groups_whitelist).count > 0
-              successful_authentication_without_ldap_single_auth(user)
-            else
-
-            end
           else
             successful_authentication_without_ldap_single_auth(user)
           end

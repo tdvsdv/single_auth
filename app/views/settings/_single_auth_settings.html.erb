@@ -14,10 +14,13 @@
   <tr>
     <td><%= l(:settings_intranet_domains) %>:</td>
     <td>
-      <input id="intranet_domains" name="settings[intranet_domains][]" multiple="multiple" type="hidden" style="width: 400px;"></input>
+      <% if @settings[:intranet_domains].nil? || !@settings[:intranet_domains].respond_to?("join") %>
+        <%= text_field_tag 'settings[intranet_domains][]', '', {:multiple => 'multiple'} %>
+      <% else %>
+        <%= text_field_tag 'settings[intranet_domains][]', @settings[:intranet_domains].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
+      <% end %>
     </td>
   </tr>
-
   <tr>
     <td><%= l(:settings_logout_timeout) %>:</td>
     <td><%= text_field_tag 'settings[logout_timeout]', @settings['logout_timeout'] %></td>
@@ -29,7 +32,13 @@
   </tr>
   <tr>
     <td><%= l(:settings_ip_whitelist) %>:</td>
-    <td><%= text_field_tag 'settings[ip_whitelist]', @settings[:ip_whitelist], :size => 50 %></td>
+    <td>
+      <% if @settings[:ip_whitelist].nil? || !@settings[:ip_whitelist].respond_to?("join") %>
+        <%= text_field_tag 'settings[ip_whitelist]', @settings[:ip_whitelist], {:multiple => 'multiple', :style => 'width: 400px;'} %>
+      <% else %>
+        <%= text_field_tag 'settings[ip_whitelist]', @settings[:ip_whitelist].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
+      <% end %>
+    </td>
   </tr>
 
 </table>
