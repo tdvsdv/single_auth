@@ -1,6 +1,6 @@
-require_dependency 'project'
-require_dependency 'principal'
-require_dependency 'user'
+# require_dependency 'project'
+# require_dependency 'principal'
+# require_dependency 'user'
 
 module SingleAuthHelper
 	unloadable
@@ -25,7 +25,23 @@ module SingleAuthHelper
 					:username => auth_source.account,
 					:password => auth_source.account_password
 				}
-			return ldap
-		end
+		return ldap
+	end
+
+  def set_auto_logout_cookie(user)
+  	logout_timeout = Setting.plugin_single_auth[:logout_timeout] || Redmine::Plugin::registered_plugins[:single_auth].settings[:default]['logout_timeout']
+
+  	token = Token.create(:user => user, :action => 'tfa_login')
+  	cookie_options = {
+    	:value => token.value,
+    	:expires => logout_timeout.to_i.seconds.from_now,
+    	:path => '/',
+    	:secure => false,
+    	:httponly => true
+  	}
+
+  	cookies[:autologout] = cookie_options
+  	logger.debug "cookies[:autologout]=#{cookies[:autologout]}"
+	end
 
 end

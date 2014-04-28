@@ -1,44 +1,96 @@
 <% defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default] %>
-<%# @settings = @settings.merge(defaults) %>
+<% @settings[:server_env_var] = Setting.plugin_single_auth[:server_env_var] || defaults['server_env_var'] %>
+<% @settings[:logout_timeout] = Setting.plugin_single_auth[:logout_timeout] || defaults['logout_timeout'] %>
+<% @settings[:token_valid_time] = Setting.plugin_single_auth[:token_valid_time] || defaults['token_valid_time'] %>
+<% @settings[:intranet_domains] = Setting.plugin_single_auth[:intranet_domains] || defaults['intranet_domains'] %>
+<% @settings[:screensaver_timeout] = Setting.plugin_single_auth[:screensaver_timeout] || defaults['screensaver_timeout'] %>
+<% @settings[:sms_domain] = Setting.plugin_single_auth[:sms_domain] || defaults['sms_domain'] %>
+<% @settings[:sms_sub_url] = Setting.plugin_single_auth[:sms_sub_url] || defaults['sms_sub_url'] %>
+<% @settings[:sms_bot_login] = Setting.plugin_single_auth[:sms_bot_login] || defaults['sms_bot_login'] %>
+<% @settings[:sms_bot_password] = Setting.plugin_single_auth[:sms_bot_password] || defaults['sms_bot_password'] %>
+
 <% groups = Group.all %>
 
-<table cellspacing="15">
-  <tr>
-    <td><%=l(:label_server_env_var)%>:</td>
-    <td><%=text_field_tag 'settings[server_env_var]', @settings['server_env_var'] %></td>
-  </tr>
-  <tr>
-    <td><%= l(:settings_enable_sms_auth) %>:</td>
-    <td><%= check_box_tag 'settings[enable_sms_auth]', true, @settings['enable_sms_auth'], :size => 50 %></td>
-  </tr>
-  <tr>
-    <td><%= l(:settings_intranet_domains) %>:</td>
-    <td>
-      <% if @settings[:intranet_domains].nil? || !@settings[:intranet_domains].respond_to?("join") %>
+<div>
+  <fieldset style="width: 65%;">
+    <legend><strong><%= l(:label_singleauth_settings_common) %></strong></legend>
+    <label for="settings_server_env_var">
+      <%= l(:label_server_env_var) %>:
+      <%= text_field_tag 'settings[server_env_var]', @settings[:server_env_var] %>
+    </label>
+    <label for="settings_enable_sms_debug_mode">
+      <%= check_box_tag 'settings[enable_sms_debug_mode]', true, @settings[:enable_sms_debug_mode] %> &mdash; <%= l(:label_sms_debug_mode) %>
+    </label>
+  </fieldset>
+  <fieldset style="width: 65%;">
+    <legend><strong><%= l(:label_singleauth_settings_sms) %></strong></legend>
+    <label for="settings_sms_domain">
+      <%= l(:label_sms_domain) %>:
+      <%= text_field_tag 'settings[sms_domain]', @settings[:sms_domain] %>
+    </label>
+    <label for="settings_sms_sub_url">
+      <%= l(:label_sms_sub_url) %>:
+      <%= text_field_tag 'settings[sms_sub_url]', @settings[:sms_sub_url] %>
+    </label>
+    <label for="settings_sms_bot_login">
+      <%= l(:label_sms_bot_login) %>:
+      <%= text_field_tag 'settings[sms_bot_login]', @settings[:sms_bot_login] %>
+    </label>
+    <label for="settings_sms_bot_password">
+      <%= l(:label_sms_bot_password) %>:
+      <%= password_field_tag 'settings[sms_bot_password]', @settings[:sms_bot_password] %>
+    </label>
+    <p>
+      <%= l(:label_full_url) %>:
+      <%= @settings[:sms_domain] + @settings[:sms_sub_url] %>
+    </p>
+  </fieldset>
+  <fieldset style="width: 65%;">
+    <legend><strong><%= l(:label_screensaver) %></strong></legend>
+    <label for="settings_screensaver_timeout">
+      <%= l(:settings_screensaver_timeout) %>:
+      <%= text_field_tag 'settings[screensaver_timeout]', @settings[:screensaver_timeout] %>
+    </label>
+    <label for="settings_enable_screensaver">
+      <%= check_box_tag 'settings[enable_screensaver]', true, @settings[:enable_screensaver] %> &mdash; <%= l(:settings_enable_screensaver) %>
+    </label>
+  </fieldset>
+  <fieldset style="width: 65%;">
+    <legend><strong><%= l(:label_tfa) %></strong></legend>
+    <label for="settings_enable_sms_auth">
+      <%= check_box_tag 'settings[enable_sms_auth]', true, @settings[:enable_sms_auth] %> &mdash; <%= l(:settings_enable_sms_auth) %>
+    </label>
+    <label for="settings_intranet_domains_">
+      <%= l(:settings_intranet_domains) %>:
+      <% if @settings[:intranet_domains].nil? || !@settings['intranet_domains'].respond_to?("join") %>
         <%= text_field_tag 'settings[intranet_domains][]', '', {:multiple => 'multiple'} %>
       <% else %>
         <%= text_field_tag 'settings[intranet_domains][]', @settings[:intranet_domains].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
       <% end %>
-    </td>
-  </tr>
-  <tr>
-    <td><%= l(:settings_logout_timeout) %>:</td>
-    <td><%= text_field_tag 'settings[logout_timeout]', @settings['logout_timeout'] %></td>
-  </tr>
-  <tr>
-    <td><%= l(:settings_user_groups_whitelist) %>:</td>
-    <td><%= select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, "id", "name", @settings[:user_groups_whitelist]), { :class => 'select2', :multiple => '' } %>
-    </td>
-  </tr>
-  <tr>
-    <td><%= l(:settings_ip_whitelist) %>:</td>
-    <td>
-      <% if @settings[:ip_whitelist].nil? || !@settings[:ip_whitelist].respond_to?("join") %>
-        <%= text_field_tag 'settings[ip_whitelist]', @settings[:ip_whitelist], {:multiple => 'multiple', :style => 'width: 400px;'} %>
-      <% else %>
-        <%= text_field_tag 'settings[ip_whitelist]', @settings[:ip_whitelist].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
-      <% end %>
-    </td>
-  </tr>
-
-</table>
+    </label>
+    <label for="settings_token_valid_time">
+      <%= l(:settings_token_valid_time) %>:
+      <%= text_field_tag 'settings[token_valid_time]', @settings[:token_valid_time] %>
+    </label>
+    <label for="settings_logout_timeout">
+      <%= l(:settings_logout_timeout) %>:
+      <%= text_field_tag 'settings[logout_timeout]', @settings[:logout_timeout] %>
+    </label>
+    <p>
+      <label for="settings_user_groups_whitelist_">
+        <%= l(:settings_user_groups_whitelist) %>:
+        <%= select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, "id", "name", @settings[:user_groups_whitelist]), { :class => 'select2', :multiple => '' } %>
+      </label>
+    </p>
+    <p>
+      <label for="settings_ip_whitelist_">
+        <%= l(:settings_ip_whitelist) %>:
+        <% if @settings[:ip_whitelist].nil? || !@settings[:ip_whitelist].respond_to?("join") %>
+          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist], {:multiple => 'multiple', :style => 'width: 400px;'} %>
+        <% else %>
+          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
+        <% end %>
+      </label>
+    </p>
+  </fieldset>
+</div>

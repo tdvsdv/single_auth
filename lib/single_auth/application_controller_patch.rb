@@ -9,6 +9,10 @@ module SingleAuth
         include SingleAuthHelper
         alias_method_chain :find_current_user, :ldap_single_auth
         alias_method_chain :logout_user, :ldap_single_auth
+        alias_method_chain :start_user_session, :single_auth
+
+        append_before_filter :update_autologout_cookie
+        before_filter :tfa_logout
       end
     end
 
@@ -17,6 +21,15 @@ module SingleAuth
       def logout_user_with_ldap_single_auth
         logout_user_without_ldap_single_auth
         session[:logout_was] = true
+
+        cookies.delete :auto_logout
+        Token.delete_all(["user_id = ? AND action = ?", User.current.id, 'tfa_login'])
+        session[:tfa_login] = false
+        logger.debug "Logged him out!"
+        if cookies[:screensaver_logout]
+          cookies.delete :screensaver_logout
+          #redi
+        end
       end
 
       def find_current_user_with_ldap_single_auth
@@ -73,7 +86,36 @@ module SingleAuth
         end
       end
 
+      def start_user_session_with_single_auth(user)
+        start_user_session_without_single_auth(user)
+        if cookies[:autologout]
+          session[:tfa_login] = true
+        end
+      end
+
+      def tfa_logout
+        if User.current.logged?
+          if session[:tfa_login] && session[:tfa_login] == true
+             unless cookies[:autologout]
+               logout_user
+               return
+             end
+           end
+        end
+      end
+
+      def update_autologout_cookie
+        unless User.current.nil?
+          if User.current.logged?
+            if !session[:tfa_login].nil? && session[:tfa_login] == true
+              if cookies[:autologout]
+                set_auto_logout_cookie(User.current)
+              end
+            end
+          end
+        end
+      end
+
     end
   end
 end
-

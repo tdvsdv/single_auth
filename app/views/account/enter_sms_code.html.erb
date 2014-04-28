@@ -1,0 +1,29 @@
+
+<h2><%=l(:label_enter_sms_code)%></h2>
+
+<%= error_messages_for 'user' %>
+
+<div class="box tabular">
+  <%= form_tag(sms_code_path) do %>
+  <%= hidden_field_tag 'token', @token.value %>
+    <p class="sms-message"><%= l(:label_sms_code_sent) %></p>
+    <p>
+      <label for="sms_code"><%=l(:field_sms_code)%><span class="required">*</span></label>
+        <%= text_field_tag 'sms_code', nil, :size => 40 %>
+        <%= submit_tag l(:button_submit) %>
+    </p>
+
+  <% end %>
+</div>
+
+<p><%= l(:label_sms_seconds_left) %>
+  <strong id="sms-counter"><%= @time_left.round %></strong> <%= l(:label_seconds) %>
+  <%= link_to l(:label_generate_new_sms_code), sms_code_path(:token => @token.value), {:id => 'new-sms-code', :style => 'display: none;'} %>
+</p>
+
+<% debug_mode = Setting.plugin_single_auth[:enable_sms_debug_mode] || false %>
+<% if debug_mode %>
+  <p>Ваш токен: <%= @token.value %></p>
+  <p>Время создания секретного кода: <%= @user.otp_time %></p>
+  <p>Ваш секретный код: <%= @user.otp_code %></p>
+<% end %>
