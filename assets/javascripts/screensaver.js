@@ -55,41 +55,74 @@ $(document).ready(function(){
 
     my.prepareToSleep = function(){
       my.timer = setTimeout(function(){
-        my.$sleeper.stop(true, true).show('slow');
-        my.runScreensaver();
+        if (TabIsVisible()){
+          my.$sleeper.stop(true, true).show('slow');
+          my.runScreensaver();
+        }
       }, my.settings.screensaver_timeout * 1000);
+    };
+
+    my.prepareToLogout = function(){
+      my.timerLogout = setTimeout(function(){
+        if (TabIsVisible()){
+          if (my.loggedOut === false && my.tfa_login === true){
+            $.ajax({url: my.logout_url,
+                type: 'post',
+                data: {},
+                success: function(data){
+                  my.loggedOut = true;
+                  document.location.href = '';
+                }
+            });
+          }
+        }
+      }, my.settings.logout_timeout * 1000);
     };
 
     my.screensaverHandler = function(){
       clearTimeout(my.timer);
+      clearTimeout(my.timerLogout);
       my.stopScreensaver();
       my.prepareToSleep();
+      my.prepareToLogout();
       if (my.$sleeper.css('display') !== 'none'){
-        console.log('log him out!');
-        if (my.loggedOut === false && my.tfa_login === true){
-          $.ajax({url: my.logout_url,
-                  type: 'post',
-                  data: {},
-                  success: function(data){
-                    my.loggedOut = true;
-                    document.location.href = '';
-                  }
-          });
-        }
         my.$sleeper.stop(true, true).hide('slow');
         my.stopScreensaver();
         $('html, body').css({width: '', height: '', margin: '', padding: ''});
       }
     };
 
+    // my.prepareToLogout = function(){
+    //   my.timerLogout = setTimeout(function(){
+    //     if (TabIsVisible()){
+
+    //     }
+    //   }, my.settings.logout_timeout);
+    // };
+
+    // my.logoutHandler = function(){
+    //   console.log('log him out!');
+    //   my.timerLogout = setTimeout(function(){
+    //     if (TabIsVisible() === true){
+
+    //     }
+    //   }, my.settings.logout_timeout);
+    // }
+
     return my;
   })(RMPlus.SingleAuth || {});
 
+  var events = 'mousemove.screensaver click.screensaver mouseup.screensaver mousedown.screensaver keydown.screensaver keypress.screensaver keyup.screensaver submit.screensaver change.screensaver mouseenter.screensaver scroll.screensaver resize.screensaver dblclick.screensaver';
   if (RMPlus.Utils.exists('SingleAuth.settings.enable_screensaver') && RMPlus.Utils.exists('SingleAuth.settings.screensaver_timeout')){
     if (RMPlus.SingleAuth.settings.enable_screensaver === 'true'){
-      var events = 'mousemove.screensaver click.screensaver mouseup.screensaver mousedown.screensaver keydown.screensaver keypress.screensaver keyup.screensaver submit.screensaver change.screensaver mouseenter.screensaver scroll.screensaver resize.screensaver dblclick.screensaver'
-
       $(document).on(events, RMPlus.SingleAuth.screensaverHandler);
     }
   }
+  if (RMPlus.Utils.exists('SingleAuth.settings.logout_timeout') && RMPlus.Utils.exists('SingleAuth.tfa_login')){
+    RMPlus.SingleAuth.settings.logout_timeout = parseInt(RMPlus.SingleAuth.settings.logout_timeout);
+    if (RMPlus.SingleAuth.tfa_login === true){
+      $(document).on(events, RMPlus.SingleAuth.logoutHandler);
+    }
+  }
+
 });

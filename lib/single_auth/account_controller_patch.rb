@@ -39,7 +39,7 @@ module SingleAuth
         if enable_sms_auth
           if user.respond_to?("user_phones")
             if (user.groups.map{|group| group.id.to_s} & user_groups_whitelist).count == 0
-              unless debug_mode && user.admin?
+              #unless debug_mode && user.admin?
                 unless intranet_domains.include?(request.domain) && ip_whitelist.include?(request.remote_ip)
                   if (user.user_phones.any?)
                     token = Token.new(:user => user, :action => 'enter_sms_code')
@@ -52,9 +52,9 @@ module SingleAuth
                 else
                   successful_authentication_without_ldap_single_auth(user)
                 end
-              else
-                successful_authentication_without_ldap_single_auth(user)
-              end
+              #else
+              #  successful_authentication_without_ldap_single_auth(user)
+              #end
             else
               successful_authentication_without_ldap_single_auth(user)
             end
