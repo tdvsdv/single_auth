@@ -67,8 +67,7 @@ module SingleAuth
       end
 
       def enter_sms_code
-        token_valid_time = Setting.plugin_single_auth[:token_valid_time] || Redmine::Plugin::registered_plugins[:single_auth].settings[:default][:token_valid_time]
-        token_valid_time = token_valid_time.to_i
+        token_valid_time = (Setting.plugin_single_auth[:token_valid_time] || Redmine::Plugin::registered_plugins[:single_auth].settings[:default][:token_valid_time]).to_i
         debug_mode = Setting.plugin_single_auth[:enable_sms_debug_mode] || false
 
         if params[:token]

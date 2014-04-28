@@ -32,6 +32,10 @@
       <%= l(:label_sms_sub_url) %>:
       <%= text_field_tag 'settings[sms_sub_url]', @settings[:sms_sub_url] %>
     </label>
+    <p>
+      <%= l(:label_full_url) %>:
+      <strong><%= @settings[:sms_domain] + @settings[:sms_sub_url] %></strong>
+    </p>
     <label for="settings_sms_bot_login">
       <%= l(:label_sms_bot_login) %>:
       <%= text_field_tag 'settings[sms_bot_login]', @settings[:sms_bot_login] %>
@@ -40,10 +44,6 @@
       <%= l(:label_sms_bot_password) %>:
       <%= password_field_tag 'settings[sms_bot_password]', @settings[:sms_bot_password] %>
     </label>
-    <p>
-      <%= l(:label_full_url) %>:
-      <%= @settings[:sms_domain] + @settings[:sms_sub_url] %>
-    </p>
   </fieldset>
   <fieldset style="width: 65%;">
     <legend><strong><%= l(:label_screensaver) %></strong></legend>

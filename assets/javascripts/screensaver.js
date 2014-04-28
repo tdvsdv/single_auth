@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     my.ctx = my.sleeper.getContext("2d");
 
-    my.characters = "1234567890ABCDEFGx"
+    my.characters = "1234567890ABCDEFx"
     my.screensaver_fontsize = 10;
 
     my.sleeper.height = window.innerHeight;

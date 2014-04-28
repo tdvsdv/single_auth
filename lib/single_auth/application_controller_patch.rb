@@ -25,11 +25,6 @@ module SingleAuth
         cookies.delete :auto_logout
         Token.delete_all(["user_id = ? AND action = ?", User.current.id, 'tfa_login'])
         session[:tfa_login] = false
-        logger.debug "Logged him out!"
-        if cookies[:screensaver_logout]
-          cookies.delete :screensaver_logout
-          #redi
-        end
       end
 
       def find_current_user_with_ldap_single_auth
@@ -96,11 +91,11 @@ module SingleAuth
       def tfa_logout
         if User.current.logged?
           if session[:tfa_login] && session[:tfa_login] == true
-             unless cookies[:autologout]
-               logout_user
-               return
-             end
-           end
+            unless cookies[:autologout]
+              logout_user
+              return
+            end
+          end
         end
       end
 
