@@ -117,6 +117,7 @@ module SingleAuth
       end
 
       def send_sms_code(user, cell_phone)
+        defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default]
         username = Setting.plugin_single_auth[:sms_bot_login] || defaults['sms_bot_login']
         password = Setting.plugin_single_auth[:sms_bot_password] || defaults['sms_bot_password']
         phone_number = cell_phone.phone.gsub(/[\+\s]/, '')
@@ -124,24 +125,23 @@ module SingleAuth
 
         data = {:username => username, :password => password, :data => {:to => [phone_number], :body => message}}
 
-        sms_domain = Setting.plugin_single_auth[:sms_domain] || defaults['sms_domain']
-        sms_sub_url = Setting.plugin_single_auth[:sms_sub_url] || defaults['sms_sub_url']
+        sms_url = Setting.plugin_single_auth[:sms_url] || defaults['sms_url']
 
-        uri = URI.parse(sms_domain)
+        uri = URI.parse(sms_url)
         http = Net::HTTP.new(uri.host, uri.port)
-        request = Net::HTTP::Post.new(sms_sub_url)
+        request = Net::HTTP::Post.new(uri.request_uri)
         request.body = data.to_param
 
         begin
           response = http.request(request)
+          if (response.code.to_i == 200)
+            logger.debug "SMS service received request. Response body: #{response.body}"
+          end
         rescue
           flash.now[:error] = l(:label_no_user_phone)
           redirect_to(home_url)
         end
 
-        if (response.code.to_i == 200)
-          logger.debug "SMS service received request. Response body: #{response.body}"
-        end
       end
 
     end
