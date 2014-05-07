@@ -31,7 +31,9 @@ module SingleAuth
         current_user = find_current_user_without_ldap_single_auth
 
         if current_user.nil? && !session[:logout_was] && request.env[Setting.plugin_single_auth['server_env_var']]
-          current_user = try_login_by_remote_env(request.env[Setting.plugin_single_auth['server_env_var']])
+          #unless
+            current_user = try_login_by_remote_env(request.env[Setting.plugin_single_auth['server_env_var']])
+          #end
         end
 
         current_user
