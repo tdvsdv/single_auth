@@ -18,24 +18,14 @@
       <%= l(:label_server_env_var) %>:
       <%= text_field_tag 'settings[server_env_var]', @settings[:server_env_var] %>
     </label>
-    <label for="settings_enable_sms_debug_mode">
-      <%= check_box_tag 'settings[enable_sms_debug_mode]', true, @settings[:enable_sms_debug_mode] %> &mdash; <%= l(:label_sms_debug_mode) %>
-    </label>
   </fieldset>
   <fieldset style="width: 65%;">
+    <p><strong><%= l(:label_singleauth_settings_warning) %></strong></p>
     <legend><strong><%= l(:label_singleauth_settings_sms) %></strong></legend>
-    <label for="settings_sms_domain">
-      <%= l(:label_sms_domain) %>:
-      <%= text_field_tag 'settings[sms_domain]', @settings[:sms_domain] %>
+    <label for="settings_sms_url">
+      <%= l(:label_sms_url) %>:
+      <%= text_field_tag 'settings[sms_url]', @settings[:sms_url] %>
     </label>
-    <label for="settings_sms_sub_url">
-      <%= l(:label_sms_sub_url) %>:
-      <%= text_field_tag 'settings[sms_sub_url]', @settings[:sms_sub_url] %>
-    </label>
-    <p>
-      <%= l(:label_full_url) %>:
-      <strong><%= @settings[:sms_domain] + @settings[:sms_sub_url] %></strong>
-    </p>
     <label for="settings_sms_bot_login">
       <%= l(:label_sms_bot_login) %>:
       <%= text_field_tag 'settings[sms_bot_login]', @settings[:sms_bot_login] %>
@@ -44,15 +34,18 @@
       <%= l(:label_sms_bot_password) %>:
       <%= password_field_tag 'settings[sms_bot_password]', @settings[:sms_bot_password] %>
     </label>
+    <label for="settings_enable_sms_debug_mode">
+      <%= check_box_tag 'settings[enable_sms_debug_mode]', true, @settings[:enable_sms_debug_mode] %> &mdash; <%= l(:label_sms_debug_mode) %>
+    </label>
   </fieldset>
   <fieldset style="width: 65%;">
     <legend><strong><%= l(:label_screensaver) %></strong></legend>
+    <label for="settings_enable_screensaver">
+      <%= check_box_tag 'settings[enable_screensaver]', true, @settings[:enable_screensaver] %> &mdash; <%= l(:settings_enable_screensaver) %>
+    </label>
     <label for="settings_screensaver_timeout">
       <%= l(:settings_screensaver_timeout) %>:
       <%= text_field_tag 'settings[screensaver_timeout]', @settings[:screensaver_timeout] %>
-    </label>
-    <label for="settings_enable_screensaver">
-      <%= check_box_tag 'settings[enable_screensaver]', true, @settings[:enable_screensaver] %> &mdash; <%= l(:settings_enable_screensaver) %>
     </label>
   </fieldset>
   <fieldset style="width: 65%;">
