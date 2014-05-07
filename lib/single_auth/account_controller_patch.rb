@@ -39,22 +39,18 @@ module SingleAuth
         if enable_sms_auth
           if user.respond_to?("user_phones")
             if (user.groups.map{|group| group.id.to_s} & user_groups_whitelist).count == 0
-              #unless debug_mode && user.admin?
-                unless intranet_domains.include?(request.domain) && ip_whitelist.include?(request.remote_ip)
-                  if (user.user_phones.any?)
-                    token = Token.new(:user => user, :action => 'enter_sms_code')
-                    if token.save
-                      redirect_to :controller => 'account', :action => 'enter_sms_code', :token => token.value
-                    end
-                  else
-                    flash.now[:error] = l(:label_no_user_phone)
+              unless intranet_domains.include?(request.domain) && ip_whitelist.include?(request.remote_ip)
+                if (user.user_phones.any?)
+                  token = Token.new(:user => user, :action => 'enter_sms_code')
+                  if token.save
+                    redirect_to :controller => 'account', :action => 'enter_sms_code', :token => token.value
                   end
                 else
-                  successful_authentication_without_ldap_single_auth(user)
+                  flash.now[:error] = l(:label_no_user_phone)
                 end
-              #else
-              #  successful_authentication_without_ldap_single_auth(user)
-              #end
+              else
+                successful_authentication_without_ldap_single_auth(user)
+              end
             else
               successful_authentication_without_ldap_single_auth(user)
             end
@@ -93,8 +89,6 @@ module SingleAuth
               flash[:error] = l(:label_no_user_phone)
               redirect_to(signin_path)
             end
-
-            logger.debug("time_left=#{@time_left}")
           elsif request.post?
             (redirect_to home_url; return) unless @user and @user.active?
 
@@ -126,7 +120,7 @@ module SingleAuth
         username = Setting.plugin_single_auth[:sms_bot_login] || defaults['sms_bot_login']
         password = Setting.plugin_single_auth[:sms_bot_password] || defaults['sms_bot_password']
         phone_number = cell_phone.phone.gsub(/[\+\s]/, '')
-        message = l(:label_sms_message)
+        message = l(:label_sms_message, :code => user.otp_code)
 
         data = {:username => username, :password => password, :data => {:to => [phone_number], :body => message}}
 
@@ -138,10 +132,15 @@ module SingleAuth
         request = Net::HTTP::Post.new(sms_sub_url)
         request.body = data.to_param
 
-        response = http.request(request)
+        begin
+          response = http.request(request)
+        rescue
+          flash[:error] = l(:label_no_user_phone)
+          redirect_to(home_url)
+        end
 
         if (response.code.to_i == 200)
-          console.log "SMS service received request. Response body: #{response.body}"
+          logger.debug "SMS service received request. Response body: #{response.body}"
         end
       end
 

@@ -31,3 +31,4 @@ en:
   label_sms_bot_login: "Login for sms sender service"
   label_sms_bot_password: "Password for sms sender service"
   label_sms_message: "Your one-time password for authentification in Redmine is: %{code}"
+  label_sms_network_error: "Network error occured. Please, contact Redmine administrator or try again later"

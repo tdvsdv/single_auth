@@ -25,5 +25,5 @@
 <% if debug_mode %>
   <p>Ваш токен: <%= @token.value %></p>
   <p>Время создания секретного кода: <%= @user.otp_time %></p>
-  <p>Ваш секретный код: <%= @user.otp_code %></p>
+  <p><%= l(:label_sms_message) %>: <%= @user.otp_code %></p>
 <% end %>

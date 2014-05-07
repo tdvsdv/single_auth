@@ -39,7 +39,7 @@ module ActiveModel
       totp = ROTP::TOTP.new(self)
       time_left = self.otp_time_left(time, totp.interval)
       code_expired = false
-      if time_left < 0 || time_left == totp.interval
+      if time_left <= 0 || time_left == totp.interval
         code_expired = true
       end
       code_expired

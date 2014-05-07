@@ -31,4 +31,5 @@ ru:
   label_sms_bot_login: "Логин для сервиса рассылки SMS"
   label_sms_bot_password: "Пароль для сервиса рассылки SMS"
   label_sms_message: "Ваш код для двухфакторной авторизации в Redmine: %{code}"
+  label_sms_network_error: "Произошла ошибка сети. Обратитесь к администратору Redmine или попробуйте еще раз позже"
 
