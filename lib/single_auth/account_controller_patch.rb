@@ -135,7 +135,7 @@ module SingleAuth
         begin
           response = http.request(request)
         rescue
-          flash[:error] = l(:label_no_user_phone)
+          flash.now[:error] = l(:label_no_user_phone)
           redirect_to(home_url)
         end
 
