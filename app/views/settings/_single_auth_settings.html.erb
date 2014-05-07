@@ -23,7 +23,7 @@
     <legend><strong><%= l(:label_singleauth_settings_sms) %></strong></legend>
     <label for="settings_sms_url">
       <%= l(:label_sms_url) %>:
-      <%= text_field_tag 'settings[sms_url]', @settings[:sms_url] %>
+      <%= text_field_tag 'settings[sms_url]', @settings[:sms_url], :style => 'width: 250px;' %>
     </label>
     <label for="settings_sms_bot_login">
       <%= l(:label_sms_bot_login) %>:
