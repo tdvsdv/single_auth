@@ -1,14 +1,14 @@
 # Russian strings
 ru:
   label_server_env_var: "Имя серверной переменной окружения"
-  settings_enable_sms_auth: "Включить двухфакторную авторизацию по смс"
+  settings_enable_sms_auth: "Включить двухфакторную авторизацию по смс."
   settings_logout_timeout: "Время бездействия до автоматического выхода из системы (в секундах)"
-  settings_user_groups_whitelist: "Не проводить двухфакторную аутентификацию на доменах"
-  settings_ip_whitelist: "Список ip-адресов, для которых не требуется двухфакторная авторизация"
-  settings_intranet_domains: "Список доверенных доменов"
+  settings_user_groups_whitelist: "Список групп пользователей, для которых не требуется двухфакторная аутентификация"
+  settings_ip_whitelist: "Список ip-адресов, для которых не требуется двухфакторная аутентификация"
+  settings_intranet_domains: "Не проводить двухфакторную аутентификацию на доменах"
   settings_token_valid_time: "Время, в течении которого SMS-код действителен (в секундах)"
   settings_screensaver_timeout: "Время бездействия, по истечении которого экран затемняется (в секундах)"
-  settings_enable_screensaver: "Включить затемнение экрана"
+  settings_enable_screensaver: "Включить затемнение экрана."
 
   label_enter_sms_code: "Введите SMS-код"
   field_sms_code: "SMS-код"
@@ -31,5 +31,5 @@ ru:
   label_sms_bot_password: "Пароль для сервиса рассылки SMS"
   label_sms_message: "Ваш код для двухфакторной аутентификации в Redmine: %{code}"
   label_sms_network_error: "Произошла ошибка сети. Обратитесь к администратору Redmine или попробуйте еще раз позже"
-  label_singleauth_settings_warning: "ВНИМАНИЕ! Отправка SMS будет работать только в корпоративной сети, в которой реализован шлюз для отправки SMS"
+  label_singleauth_settings_warning: "ВНИМАНИЕ! Отправка SMS будет работать только в корпоративной сети, в которой реализован шлюз для отправки SMS."
 

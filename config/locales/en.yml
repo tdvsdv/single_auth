@@ -1,14 +1,14 @@
 # English strings
 en:
   label_server_env_var: Name of server environment variable
-  settings_enable_sms_auth: "Enable two-factor authentication"
+  settings_enable_sms_auth: "Enable two-factor authentication."
   settings_logout_timeout: "Idle time before automatic logout (in seconds)"
   settings_user_groups_whitelist: "These user groups doesn't require two-factor authentication"
   settings_ip_whitelist: "These ip addresses doesn't require two-factor authentication"
   settings_intranet_domains: "Trusted domains list (intranet domains, no two-factor authentication required)"
   settings_token_valid_time: "During this time (in seconds) SMS token is valid"
   settings_screensaver_timeout: "Idle time before screensaver is activated (in seconds)"
-  settings_enable_screensaver: "Enable screensaver"
+  settings_enable_screensaver: "Enable screensaver."
 
   label_enter_sms_code: "Enter SMS code"
   field_sms_code: "SMS code"
@@ -31,4 +31,4 @@ en:
   label_sms_bot_password: "Password for sms sender service"
   label_sms_message: "Your one-time password for authentification in Redmine is: %{code}"
   label_sms_network_error: "Network error occured. Please, contact Redmine administrator or try again later"
-  label_singleauth_settings_warning: "Warning! SMS sending will work only in corporate network with sms sending gateway"
+  label_singleauth_settings_warning: "Warning! SMS sending will work only in corporate network with sms sending gateway."

@@ -20,3 +20,36 @@ canvas {
 .sms-message {
   padding-left: 2px !important;
 }
+
+#sms-form {
+  width: 512px;
+  margin-top: 5em;
+  padding: 1em;
+  margin-left: auto;
+  margin-right: auto;
+  border: 2px solid #FDBF3B;
+  background-color: #FFEBC1;
+}
+
+#sms-form p {
+  padding: 6px;
+}
+
+#sms-form a {
+  display: inline-block;
+  padding: 6px;
+}
+
+#sms-form label {
+  width: 208px;
+  font-weight: bold;
+  float: left;
+  text-align: right;
+  line-height: 24px;
+}
+
+#sms-form span {
+  float: left;
+  text-align: right;
+  line-height: 24px;
+}
