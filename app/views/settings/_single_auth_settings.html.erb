@@ -4,8 +4,7 @@
 <% @settings[:token_valid_time] = Setting.plugin_single_auth[:token_valid_time] || defaults['token_valid_time'] %>
 <% @settings[:intranet_domains] = Setting.plugin_single_auth[:intranet_domains] || defaults['intranet_domains'] %>
 <% @settings[:screensaver_timeout] = Setting.plugin_single_auth[:screensaver_timeout] || defaults['screensaver_timeout'] %>
-<% @settings[:sms_domain] = Setting.plugin_single_auth[:sms_domain] || defaults['sms_domain'] %>
-<% @settings[:sms_sub_url] = Setting.plugin_single_auth[:sms_sub_url] || defaults['sms_sub_url'] %>
+<% @settings[:sms_url] = Setting.plugin_single_auth[:sms_url] || defaults['sms_url'] %>
 <% @settings[:sms_bot_login] = Setting.plugin_single_auth[:sms_bot_login] || defaults['sms_bot_login'] %>
 <% @settings[:sms_bot_password] = Setting.plugin_single_auth[:sms_bot_password] || defaults['sms_bot_password'] %>
 

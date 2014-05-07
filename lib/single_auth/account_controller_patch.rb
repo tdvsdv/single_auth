@@ -126,18 +126,25 @@ module SingleAuth
         data = {:username => username, :password => password, :data => {:to => [phone_number], :body => message}}
 
         sms_url = Setting.plugin_single_auth[:sms_url] || defaults['sms_url']
-
-        uri = URI.parse(sms_url)
-        http = Net::HTTP.new(uri.host, uri.port)
-        request = Net::HTTP::Post.new(uri.request_uri)
-        request.body = data.to_param
+        logger.debug "sms_url=#{sms_url}"
 
         begin
+          uri = URI.parse(sms_url)
+          http = Net::HTTP.new(uri.host, uri.port)
+          request = Net::HTTP::Post.new(uri.request_uri)
+          request.body = data.to_param
+          logger.debug "request.body=#{request.body}"
+
           response = http.request(request)
           if (response.code.to_i == 200)
             logger.debug "SMS service received request. Response body: #{response.body}"
+          else
+            user.otp_time = nil
+            user.save
           end
         rescue
+          user.otp_time = nil
+          user.save
           flash.now[:error] = l(:label_no_user_phone)
           redirect_to(home_url)
         end
