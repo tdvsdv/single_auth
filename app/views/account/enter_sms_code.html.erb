@@ -10,12 +10,12 @@
       <%= l(:label_sms_code_sent) %>
     </p>
     <p style="text-align: right;">
-      <label for="sms_code"><%=l(:field_password)%>:</label>
+      <label for="sms_code"><%=l(:label_enter_sms_code)%>:</label>
       <%= text_field_tag 'sms_code', nil, :size => 40 %>
     </p>
     <p style="text-align: right;">
       <span><%= l(:label_sms_seconds_left) %> <strong id="sms-counter"><%= @time_left.round %></strong> <%= l(:label_seconds) %></span>
-      <%= submit_tag l(:button_submit) %>
+      <%= submit_tag l(:label_login) %>
     </p>
     <%= link_to l(:label_generate_new_sms_code), sms_code_path(:token => @token.value), {:id => 'new-sms-code', :style => 'display: none;'} %>
   <% end %>

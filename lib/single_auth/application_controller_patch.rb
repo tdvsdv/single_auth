@@ -19,6 +19,10 @@ module SingleAuth
     module ClassMethods
 
       def logout_user_with_ldap_single_auth
+        user = User.current
+        user.otp_time = nil
+        user.save
+
         logout_user_without_ldap_single_auth
         session[:logout_was] = true
 
@@ -29,7 +33,7 @@ module SingleAuth
 
       def find_current_user_with_ldap_single_auth
         current_user = find_current_user_without_ldap_single_auth
-
+        logger.debug "logout_was=#{session[:logout_was]}"
         if current_user.nil? && !session[:logout_was] && request.env[Setting.plugin_single_auth['server_env_var']]
           #unless
             current_user = try_login_by_remote_env(request.env[Setting.plugin_single_auth['server_env_var']])
