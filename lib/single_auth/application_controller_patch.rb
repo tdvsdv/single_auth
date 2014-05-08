@@ -28,6 +28,7 @@ module SingleAuth
 
         cookies.delete :auto_logout
         Token.delete_all(["user_id = ? AND action = ?", User.current.id, 'tfa_login'])
+        session[:was_tfa_login] = true if session[:tfa_login] == true
         session[:tfa_login] = false
       end
 
@@ -35,9 +36,9 @@ module SingleAuth
         current_user = find_current_user_without_ldap_single_auth
         logger.debug "logout_was=#{session[:logout_was]}"
         if current_user.nil? && !session[:logout_was] && request.env[Setting.plugin_single_auth['server_env_var']]
-          #unless
+          unless session[:was_tfa_login]
             current_user = try_login_by_remote_env(request.env[Setting.plugin_single_auth['server_env_var']])
-          #end
+          end
         end
 
         current_user
@@ -45,11 +46,9 @@ module SingleAuth
 
       def try_login_by_remote_env(remote_username)
         user = User.active.find_by_login remote_username
-        # Rails.logger.debug "ggggg #{remote_username}"
         if user.nil?
           user = add_user_by_ldap_info(remote_username)
         end
-
         user if do_login(user)
       end
 
