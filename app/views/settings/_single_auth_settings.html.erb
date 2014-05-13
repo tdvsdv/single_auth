@@ -10,6 +10,33 @@
 
 <% groups = Group.all %>
 
+<%= content_for :header_tags do %>
+  <%= javascript_include_tag 'single_auth', :plugin => 'single_auth' %>
+  <%= stylesheet_link_tag 'settings', :plugin => 'a_common_libs', :media => 'screen' %>
+
+  <% all_settings = {} %>
+  <% defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default] %>
+  <% settings = Setting.plugin_single_auth %>
+  <% defaults.each{|name, value| all_settings[name] = settings[name] || defaults[name]} %>
+  <% settings.each{|name, value| all_settings[name] = settings[name] || defaults[name]} %>
+
+  <script type="text/javascript">
+  // <![CDATA[
+    RMPlus.SingleAuth = (function(my){
+      var my = my || {};
+
+      my.settings = <%= all_settings.to_json.html_safe %>;
+
+      my.logout_url = '<%= url_for(:controller => 'account', :action => 'logout', :only_path => false) %>';
+
+      my.tfa_login = <%= session[:tfa_login] || false %>;
+
+      return my;
+    })(RMPlus.SingleAuth || {});
+  // ]]>
+  </script>
+<% end %>
+
 <div>
   <fieldset style="width: 65%;">
     <legend><strong><%= l(:label_singleauth_settings_common) %></strong></legend>

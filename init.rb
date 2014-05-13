@@ -11,15 +11,10 @@ Redmine::Plugin.register :single_auth do
   settings :partial => 'settings/single_auth_settings',
     :default => {
       'server_env_var' => 'REMOTE_USER',
-      # timeout before logging inactive user out, in seconds
       'logout_timeout' => 60,
-      #:auto_logout_cookie_name => 'autologout',
-      'intranet_domains' => ['rm.prp.ru', 'rm-test-main.prp.ru', 'rm-test-selenium.prp.ru', 'rm.local', 'redmine.local'],
+      'intranet_domains' => ['rm.local', 'redmine.local'],
       'token_valid_time' => 6*60,
-      'screensaver_timeout' => 60,
-      'sms_url' => 'http://test.sender.prp.ru/api/send/sms',
-      'sms_bot_login' => 'redmine',
-      'sms_bot_password' => 'passw0rd'
+      'screensaver_timeout' => 60
       }
 end
 

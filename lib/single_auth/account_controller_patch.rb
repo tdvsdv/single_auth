@@ -26,9 +26,7 @@ module SingleAuth
       end
 
       def successful_authentication_with_ldap_single_auth(user)
-        logger.debug("domain=#{request.domain}")
-        logger.debug("ip=#{request.remote_ip}")
-        logger.debug("whitelisted_domains=#{Setting.plugin_single_auth[:intranet_domains]}")
+
 
         enable_sms_auth = Setting.plugin_single_auth[:enable_sms_auth]
         intranet_domains = Setting.plugin_single_auth[:intranet_domains] || Redmine::Plugin::registered_plugins[:single_auth].settings[:default]['intranet_domains']
@@ -39,10 +37,13 @@ module SingleAuth
         if enable_sms_auth
           if user.respond_to?("user_phones")
             if (user.groups.map{|group| group.id.to_s} & user_groups_whitelist).count == 0
-              unless intranet_domains.include?(request.domain) && ip_whitelist.include?(request.remote_ip)
-                if (user.user_phones.any?)
+              if !intranet_domains.include?(request.domain) || !ip_whitelist.include?(request.remote_ip)
+                if user.user_phones.where(:phone_type => 'cell').any?
                   token = Token.new(:user => user, :action => 'enter_sms_code')
                   if token.save
+                    logger.debug("<<< Login attempt: two-factor authentification required >>>")
+                    logger.debug("    domain=#{request.domain}")
+                    logger.debug("    ip=#{request.remote_ip}")
                     redirect_to :controller => 'account', :action => 'enter_sms_code', :token => token.value
                   end
                 else
@@ -68,7 +69,7 @@ module SingleAuth
 
         if params[:token]
           @token = Token.find_token('enter_sms_code', params[:token].to_s)
-          (redirect_to(home_url); return) if @token.nil? || @token.try(:value) == '' || @token.expired?
+          (redirect_to(home_url); return) unless @token.try(:value) || @token.expired?
           @user = @token.user
 
           if request.get?
@@ -92,11 +93,13 @@ module SingleAuth
           elsif request.post?
             (redirect_to home_url; return) unless @user and @user.active?
 
-            if params[:sms_code] && params[:sms_code].length > 0
-              sms_code = params[:sms_code]
+            if params[:sms_code] && params[:sms_code].to_s.length > 0
+              sms_code = params[:sms_code].to_s
               if @user.authenticate_otp(sms_code)
                 @token.destroy
-                set_auto_logout_cookie(@user)
+                @user.set_auto_logout_time
+                @user.tfa_login = true
+                @user.save
 
                 logger.debug "SMS code authorization at #{Time.now} for user id=#{@user.id}, name=#{@user.firstname} #{@user.lastname}"
                 logger.debug "User logged in from IP #{request.remote_ip} via domain \"#{request.domain}\""
@@ -118,22 +121,20 @@ module SingleAuth
 
       def send_sms_code(user, cell_phone)
         defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default]
-        username = Setting.plugin_single_auth[:sms_bot_login] || defaults['sms_bot_login']
-        password = Setting.plugin_single_auth[:sms_bot_password] || defaults['sms_bot_password']
+        username = Setting.plugin_single_auth[:sms_bot_login]
+        password = Setting.plugin_single_auth[:sms_bot_password]
         phone_number = cell_phone.phone.gsub(/[\+\s]/, '')
         message = l(:label_sms_message, :code => user.otp_code)
 
         data = {:username => username, :password => password, :data => {:to => [phone_number], :body => message}}
 
-        sms_url = Setting.plugin_single_auth[:sms_url] || defaults['sms_url']
-        logger.debug "sms_url=#{sms_url}"
+        sms_url = Setting.plugin_single_auth[:sms_url]
 
         begin
           uri = URI.parse(sms_url)
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Post.new(uri.request_uri)
           request.body = data.to_param
-          logger.debug "request.body=#{request.body}"
 
           response = http.request(request)
           if (response.code.to_i == 200)
@@ -145,7 +146,7 @@ module SingleAuth
         rescue
           user.otp_time = nil
           user.save
-          flash.now[:error] = l(:label_no_user_phone)
+          flash.now[:error] = l(:label_sms_network_error)
           redirect_to(home_url)
         end
 

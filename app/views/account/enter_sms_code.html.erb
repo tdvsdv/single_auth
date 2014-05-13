@@ -1,5 +1,7 @@
 
-<!-- <h2><%=l(:label_enter_sms_code)%></h2> -->
+<%= content_for :header_tags do %>
+  <%= javascript_include_tag 'sms_timer.js', :plugin => :single_auth %>
+<% end %>
 
 <%= error_messages_for 'user' %>
 
