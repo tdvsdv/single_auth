@@ -92,23 +92,6 @@ $(document).ready(function(){
       }
     };
 
-    // my.prepareToLogout = function(){
-    //   my.timerLogout = setTimeout(function(){
-    //     if (TabIsVisible()){
-
-    //     }
-    //   }, my.settings.logout_timeout);
-    // };
-
-    // my.logoutHandler = function(){
-    //   console.log('log him out!');
-    //   my.timerLogout = setTimeout(function(){
-    //     if (TabIsVisible() === true){
-
-    //     }
-    //   }, my.settings.logout_timeout);
-    // }
-
     return my;
   })(RMPlus.SingleAuth || {});
 
@@ -124,5 +107,4 @@ $(document).ready(function(){
       $(document).on(events, RMPlus.SingleAuth.logoutHandler);
     }
   }
-
 });

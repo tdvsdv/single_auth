@@ -19,6 +19,8 @@ module SingleAuth
 
       def logout_user_with_ldap_single_auth
         user = User.current
+        session[:was_tfa_login] = true if user.tfa_login
+
         user.otp_time = nil
         user.logout_time = nil
         user.tfa_login = false
@@ -28,7 +30,6 @@ module SingleAuth
         session[:logout_was] = true
 
         Token.delete_all(["user_id = ? AND action = ?", User.current.id, 'tfa_login'])
-        session[:was_tfa_login] = true if session[:tfa_login] == true
       end
 
       def find_current_user_with_ldap_single_auth

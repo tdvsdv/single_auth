@@ -11,6 +11,7 @@ module SingleAuth
         include SingleAuthHelper
 
         alias_method_chain :login, :ldap_single_auth
+        alias_method_chain :logout, :single_auth
         alias_method_chain :successful_authentication, :ldap_single_auth
       end
     end
@@ -25,9 +26,16 @@ module SingleAuth
         login_without_ldap_single_auth
       end
 
+      def logout_with_single_auth
+        if User.current.anonymous?
+          redirect_to signin_path
+        elsif request.post?
+          logout_user
+          redirect_to signin_path
+        end
+      end
+
       def successful_authentication_with_ldap_single_auth(user)
-
-
         enable_sms_auth = Setting.plugin_single_auth[:enable_sms_auth]
         intranet_domains = Setting.plugin_single_auth[:intranet_domains] || Redmine::Plugin::registered_plugins[:single_auth].settings[:default]['intranet_domains']
         ip_whitelist = Setting.plugin_single_auth[:ip_whitelist]
@@ -146,8 +154,8 @@ module SingleAuth
         rescue
           user.otp_time = nil
           user.save
-          flash.now[:error] = l(:label_sms_network_error)
-          redirect_to(home_url)
+          flash[:error] = l(:label_sms_network_error)
+          redirect_to(signin_path)
         end
 
       end

@@ -1,3 +1,25 @@
+<% all_settings = {} %>
+<% defaults = Redmine::Plugin::registered_plugins[:single_auth].settings[:default] %>
+<% settings = Setting.plugin_single_auth %>
+<% defaults.each{|name, value| all_settings[name] = settings[name] || defaults[name]} %>
+<% settings.each{|name, value| all_settings[name] = settings[name] || defaults[name]} %>
+
+<script type="text/javascript">
+// <![CDATA[
+  RMPlus.SingleAuth = (function(my){
+    var my = my || {};
+
+    my.settings = <%= all_settings.to_json.html_safe %>;
+
+    my.logout_url = '<%= url_for(:controller => 'account', :action => 'logout', :only_path => false) %>';
+
+    my.tfa_login = <%= User.current.tfa_login || false %>;
+
+    return my;
+  })(RMPlus.SingleAuth || {});
+// ]]>
+</script>
+
 <%= stylesheet_link_tag :single_auth_all_head, :plugin => :single_auth %>
 
 <%= javascript_include_tag 'screensaver.js', :plugin => :single_auth %>
