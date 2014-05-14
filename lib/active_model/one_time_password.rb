@@ -51,7 +51,7 @@ module ActiveModel
         interval = totp.interval
       end
       unless self.otp_time.nil?
-        interval - (time - self.otp_time)).to_i
+        (interval - (time - self.otp_time)).to_i
       else
         interval
       end
