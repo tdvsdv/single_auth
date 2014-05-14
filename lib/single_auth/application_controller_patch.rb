@@ -20,8 +20,6 @@ module SingleAuth
       def logout_user_with_ldap_single_auth
         user = User.current
         session[:was_tfa_login] = true if user.tfa_login
-
-        user.otp_time = nil
         user.logout_time = nil
         user.tfa_login = false
         user.save
