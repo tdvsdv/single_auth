@@ -58,6 +58,9 @@ module ROTP
     def timecode(time, code_expired = false)
       if code_expired
         timecode = (time.utc.to_f / interval)
+        if not @user.otp_time.nil?
+          timecode = timecode - (@user.otp_time.utc.to_f / interval).modulo(1)
+        end
         @user.otp_time = time
         @user.save
       else

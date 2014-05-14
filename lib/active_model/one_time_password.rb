@@ -32,7 +32,9 @@ module ActiveModel
     def otp_code(time = Time.now, padding = false)
       totp = ROTP::TOTP.new(self)
       code_expired = self.otp_expired?(time)
-      totp.at(time, code_expired, padding)
+      code = totp.at(time, code_expired, padding)
+      Rails.logger.debug "Calling totp.at with time=#{time} and code_expired=#{code_expired}. code=#{code}"
+      code
     end
 
     def otp_expired?(time = Time.now)
@@ -42,7 +44,6 @@ module ActiveModel
       if time_left <= 0 || time_left == totp.interval
         code_expired = true
       end
-      code_expired
     end
 
     def otp_time_left(time, interval = nil)
@@ -55,6 +56,8 @@ module ActiveModel
       else
         time_left = interval
       end
+      Rails.logger.debug "time_left=#{time_left}"
+      time_left
     end
 
     def provisioning_uri(account = nil)
