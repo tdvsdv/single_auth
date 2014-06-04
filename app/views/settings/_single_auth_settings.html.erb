@@ -89,12 +89,6 @@
         <% end %>
       </label>
     </p>
-    <p>
-      <label>
-       <%= select_tag 'settings[teeeest][]', options_from_collection_for_select(groups, "id", "name"), { :class => 'select2', :data => {:combobox => true, :post_url => url_for(:controller => 'groups', :action => 'create') } } %>
-       <%#= hidden_field_tag 'settings[teeest][]', groups.join(','), { :class => 'select2', :data => {:combobox => true, :post_url => url_for(:controller => 'groups', :action => 'create'), :min_search_length => 3 } } %>
-      </label>
-    </p>
   </fieldset>
 
 </div>
