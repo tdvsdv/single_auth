@@ -9,6 +9,8 @@ en:
   settings_token_valid_time: "During this time (in seconds) SMS token is valid"
   settings_screensaver_timeout: "Idle time before screensaver is activated (in seconds)"
   settings_enable_screensaver: "Enable screensaver."
+  ldap_settings_common: "Common settings"
+  ldap_settings_avatars: "Avatars settings"
 
   label_enter_sms_code: "Enter SMS code"
   field_sms_code: "SMS code"

@@ -83,11 +83,18 @@
       <label for="settings_ip_whitelist_">
         <%= l(:settings_ip_whitelist) %>:
         <% if @settings[:ip_whitelist].nil? || !@settings[:ip_whitelist].respond_to?("join") %>
-          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist], {:multiple => 'multiple', :style => 'width: 400px;'} %>
+          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist], {:style => 'width: 400px;'} %>
         <% else %>
           <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
         <% end %>
       </label>
     </p>
+    <p>
+      <label>
+       <%= select_tag 'settings[teeeest][]', options_from_collection_for_select(groups, "id", "name"), { :class => 'select2', :data => {:combobox => true, :post_url => url_for(:controller => 'groups', :action => 'create') } } %>
+       <%#= hidden_field_tag 'settings[teeest][]', groups.join(','), { :class => 'select2', :data => {:combobox => true, :post_url => url_for(:controller => 'groups', :action => 'create'), :min_search_length => 3 } } %>
+      </label>
+    </p>
   </fieldset>
+
 </div>

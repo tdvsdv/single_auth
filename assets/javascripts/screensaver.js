@@ -31,7 +31,6 @@ $(document).ready(function(){
       for(var i = 0; i < my.drops.length; i++)
       {
         var text = my.characters[Math.floor(Math.random() * my.characters.length)];
-        //x = i*font_size, y = value of drops[i]*font_size
         my.ctx.fillText(text, i * my.screensaver_fontsize, my.drops[i] * my.screensaver_fontsize);
 
         //sending the drop back to the top randomly after it has crossed the screen

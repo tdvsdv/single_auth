@@ -9,6 +9,8 @@ ru:
   settings_token_valid_time: "Время, в течении которого SMS-код действителен (в секундах)"
   settings_screensaver_timeout: "Время бездействия, по истечении которого экран затемняется (в секундах)"
   settings_enable_screensaver: "Включить затемнение экрана."
+  ldap_settings_common: "Общие настройки"
+  ldap_settings_avatars: "Настройки аватаров"
 
   label_enter_sms_code: "Введите SMS-код"
   field_sms_code: "SMS-код"
