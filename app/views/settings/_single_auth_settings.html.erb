@@ -13,6 +13,9 @@
 <%= content_for :header_tags do %>
   <%= javascript_include_tag 'single_auth', :plugin => 'single_auth' %>
   <%= stylesheet_link_tag 'settings', :plugin => 'a_common_libs', :media => 'screen' %>
+
+  <%= javascript_include_tag 'rmplus-logo', :plugin => 'single_auth', :media => 'screen' %>
+  <%= stylesheet_link_tag 'rmplus-logo', :plugin => 'single_auth', :media => 'screen' %>
 <% end %>
 
 <div>
@@ -90,5 +93,12 @@
       </label>
     </p>
   </fieldset>
+</div>
 
+<div id="rmplus-logo">
+  <div>
+  <%= image_tag 'logo.png', :plugin => :single_auth, alt: 'Вы можете найти другие наши плагины на сайте http://rmplus.pro',
+  title: 'Вы можете найти другие наши плагины на сайте http://rmplus.pro', width: 104, height: 39 %>
+  <span><%= l(:label_rmplus_logo) %>&nbsp<a href="http://rmplus.pro">http://rmplus.pro</a>.</span>
+  </div>
 </div>

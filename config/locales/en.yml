@@ -34,3 +34,5 @@ en:
   label_sms_message: "Your one-time password for authentification in Redmine is: %{code}"
   label_sms_network_error: "Network error occured. Please, contact Redmine administrator or try again later"
   label_singleauth_settings_warning: "Warning! SMS sending will work only in corporate network with sms sending gateway."
+
+  label_rmplus_logo: "This plugin is developed by \"RM+\" team. You can check out all of our plugins on"
