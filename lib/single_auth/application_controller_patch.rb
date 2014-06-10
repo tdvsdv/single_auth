@@ -32,7 +32,7 @@ module SingleAuth
 
       def find_current_user_with_ldap_single_auth
         current_user = find_current_user_without_ldap_single_auth
-        if current_user.nil? && !session[:logout_was] && request.env[Setting.plugin_single_auth['server_env_var']]
+        if current_user.nil? && request.env[Setting.plugin_single_auth['server_env_var']]
           unless session[:was_tfa_login]
             current_user = try_login_by_remote_env(request.env[Setting.plugin_single_auth['server_env_var']])
           end
@@ -45,7 +45,7 @@ module SingleAuth
         if user.nil?
           user = add_user_by_ldap_info(remote_username)
         end
-        user if do_login(user)
+        user if do_login(user) && !session[:logout_was]
       end
 
       def add_user_by_ldap_info(remote_username)
