@@ -13,8 +13,6 @@
 <%= content_for :header_tags do %>
   <%= javascript_include_tag 'single_auth', :plugin => 'single_auth' %>
   <%= stylesheet_link_tag 'settings', :plugin => 'a_common_libs', :media => 'screen' %>
-
-  <%= stylesheet_link_tag 'rmplus-logo', :plugin => 'single_auth', :media => 'screen' %>
 <% end %>
 
 <div>
@@ -94,18 +92,4 @@
   </fieldset>
 </div>
 
-<div id="rmplus-logo">
-  <div>
-  <%= image_tag 'logo.png', :plugin => :single_auth, alt: l(:label_rmplus_logo), title: l(:label_rmplus_logo), width: 104, height: 39 %>
-  <span><%= l(:label_rmplus_logo) %>&nbsp<a href="http://rmplus.pro">http://rmplus.pro</a>.</span>
-  </div>
-</div>
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function(){
-  var logo = $('#rmplus-logo').clone();
-  $('#rmplus-logo').remove();
-  $('div#settings').append(logo);
-});
-//]]>
-</script>
+<%= render :file => File.join(File.dirname(__FILE__), "_rmplus_logo.html.erb") %>
