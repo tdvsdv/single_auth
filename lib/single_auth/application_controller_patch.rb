@@ -45,7 +45,8 @@ module SingleAuth
         if user.nil?
           user = add_user_by_ldap_info(remote_username)
         end
-        user if do_login(user) && !session[:logout_was]
+
+        user if !session[:logout_was] && do_login(user)
       end
 
       def add_user_by_ldap_info(remote_username)
