@@ -56,9 +56,9 @@ module SingleAuth
           filter = Net::LDAP::Filter.eq(auth_source.attr_login, remote_username)
           ldap_connection = get_ldap_conn
           ldap_connection.search(:base => auth_source.base_dn, :filter => filter) do |entry|
-            if AuthSourceLdap.respond_to?(:make_user_from_entry)
-              # if ldap_users_sync method present - do it like a sync
-              new_user = AuthSourceLdap.make_user_from_entry(auth_source, ldap_connection, entry)
+            if Redmine::Plugin.installed?(:ldap_users_sync)
+              user_sync = LdapUsersSync::LdapSyncUser.new(self, ldap_connection, true)
+              new_user = user_sync.update_or_create(entry, LdapUsersSync::LdapSyncUser.object_guid_to_s(entry['objectGUID']))
             else
               new_user = User.create( { :login => remote_username,
                                         :firstname => entry[auth_source.attr_firstname].first.to_s,
