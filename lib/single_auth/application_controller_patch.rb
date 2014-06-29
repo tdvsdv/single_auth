@@ -32,7 +32,7 @@ module SingleAuth
 
       def find_current_user_with_ldap_single_auth
         current_user = find_current_user_without_ldap_single_auth
-        if current_user.nil? && !session[:logout_was] && request.env[Setting.plugin_single_auth['server_env_var']]
+        if current_user.nil? && request.env[Setting.plugin_single_auth['server_env_var']]
           unless session[:was_tfa_login]
             current_user = try_login_by_remote_env(request.env[Setting.plugin_single_auth['server_env_var']])
           end
@@ -45,7 +45,8 @@ module SingleAuth
         if user.nil?
           user = add_user_by_ldap_info(remote_username)
         end
-        user if do_login(user)
+
+        user if !session[:logout_was] && do_login(user)
       end
 
       def add_user_by_ldap_info(remote_username)
@@ -55,9 +56,9 @@ module SingleAuth
           filter = Net::LDAP::Filter.eq(auth_source.attr_login, remote_username)
           ldap_connection = get_ldap_conn
           ldap_connection.search(:base => auth_source.base_dn, :filter => filter) do |entry|
-            if AuthSourceLdap.respond_to?(:make_user_from_entry)
-              # if ldap_users_sync method present - do it like a sync
-              new_user = AuthSourceLdap.make_user_from_entry(auth_source, ldap_connection, entry)
+            if Redmine::Plugin.installed?(:ldap_users_sync)
+              user_sync = LdapUsersSync::LdapSyncUser.new(self, ldap_connection, true)
+              new_user = user_sync.update_or_create(entry, LdapUsersSync::LdapSyncUser.object_guid_to_s(entry['objectGUID']))
             else
               new_user = User.create( { :login => remote_username,
                                         :firstname => entry[auth_source.attr_firstname].first.to_s,
