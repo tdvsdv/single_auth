@@ -10,7 +10,7 @@
 
 <% groups = Group.all %>
 
-<%= content_for :header_tags do %>
+<% content_for :header_tags do %>
   <%= javascript_include_tag 'single_auth', :plugin => 'single_auth' %>
   <%= stylesheet_link_tag 'settings', :plugin => 'a_common_libs', :media => 'screen' %>
 <% end %>
