@@ -36,3 +36,4 @@ ru:
   label_singleauth_settings_warning: "ВНИМАНИЕ! Отправка SMS будет работать только в корпоративной сети, в которой реализован шлюз для отправки SMS."
 
   label_rmplus_logo: "Данный плагин разработан командой «RM+». Вы всегда можете найти другие наши плагины на сайте"
+  label_there_are_no_groups_currently_defined_in_redmine: "Сейчас в Redmine нет ни одной группы"

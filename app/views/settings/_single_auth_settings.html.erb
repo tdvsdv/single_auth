@@ -11,8 +11,8 @@
 <% groups = Group.all %>
 
 <% content_for :header_tags do %>
-  <%= javascript_include_tag 'single_auth', :plugin => 'single_auth' %>
-  <%= stylesheet_link_tag 'settings', :plugin => 'a_common_libs', :media => 'screen' %>
+  <%= javascript_include_tag 'single_auth', plugin: 'single_auth' %>
+  <%= stylesheet_link_tag 'settings', plugin: 'single_auth', media: 'screen' %>
 <% end %>
 
 <div>
@@ -23,6 +23,18 @@
       <%= text_field_tag 'settings[server_env_var]', @settings[:server_env_var] %>
     </label>
   </fieldset>
+
+  <fieldset style="width: 65%;">
+    <legend><strong><%= l(:label_screensaver) %></strong></legend>
+    <label for="settings_enable_screensaver">
+      <%= check_box_tag 'settings[enable_screensaver]', true, @settings[:enable_screensaver] %> &mdash; <%= l(:settings_enable_screensaver) %>
+    </label>
+    <label for="settings_screensaver_timeout">
+      <%= l(:settings_screensaver_timeout) %>:
+      <%= text_field_tag 'settings[screensaver_timeout]', @settings[:screensaver_timeout] %>
+    </label>
+  </fieldset>
+
   <fieldset style="width: 65%;">
     <p><strong><%= l(:label_singleauth_settings_warning) %></strong></p>
     <legend><strong><%= l(:label_singleauth_settings_sms) %></strong></legend>
@@ -42,16 +54,7 @@
       <%= check_box_tag 'settings[enable_sms_debug_mode]', true, @settings[:enable_sms_debug_mode] %> &mdash; <%= l(:label_sms_debug_mode) %>
     </label>
   </fieldset>
-  <fieldset style="width: 65%;">
-    <legend><strong><%= l(:label_screensaver) %></strong></legend>
-    <label for="settings_enable_screensaver">
-      <%= check_box_tag 'settings[enable_screensaver]', true, @settings[:enable_screensaver] %> &mdash; <%= l(:settings_enable_screensaver) %>
-    </label>
-    <label for="settings_screensaver_timeout">
-      <%= l(:settings_screensaver_timeout) %>:
-      <%= text_field_tag 'settings[screensaver_timeout]', @settings[:screensaver_timeout] %>
-    </label>
-  </fieldset>
+
   <fieldset style="width: 65%;">
     <legend><strong><%= l(:label_tfa) %></strong></legend>
     <label for="settings_enable_sms_auth">
@@ -59,10 +62,10 @@
     </label>
     <label for="settings_intranet_domains_">
       <%= l(:settings_intranet_domains) %>:
-      <% if @settings[:intranet_domains].nil? || !@settings['intranet_domains'].respond_to?("join") %>
-        <%= text_field_tag 'settings[intranet_domains][]', '', {:multiple => 'multiple'} %>
+      <% if @settings[:intranet_domains].nil? || !@settings['intranet_domains'].respond_to?('join') %>
+        <%= text_field_tag 'settings[intranet_domains][]', '', {multiple: 'multiple'} %>
       <% else %>
-        <%= text_field_tag 'settings[intranet_domains][]', @settings[:intranet_domains].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
+        <%= text_field_tag 'settings[intranet_domains][]', @settings[:intranet_domains].join(','), {multiple: 'multiple', style: 'width: 400px;'} %>
       <% end %>
     </label>
     <label for="settings_token_valid_time">
@@ -76,20 +79,24 @@
     <p>
       <label for="settings_user_groups_whitelist_">
         <%= l(:settings_user_groups_whitelist) %>:
-        <%= select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, "id", "name", @settings[:user_groups_whitelist]), { :class => 'select2', :multiple => '' } %>
+        <% if groups.any? %>
+        <%= select_tag 'settings[user_groups_whitelist][]', options_from_collection_for_select(groups, 'id', 'name', @settings[:user_groups_whitelist]), { class: 'select2', multiple: true } %>
+        <% else %>
+          <b><%= l(:label_there_are_no_groups_currently_defined_in_redmine) %></b>
+        <% end %>
       </label>
     </p>
     <p>
       <label for="settings_ip_whitelist_">
         <%= l(:settings_ip_whitelist) %>:
-        <% if @settings[:ip_whitelist].nil? || !@settings[:ip_whitelist].respond_to?("join") %>
-          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist], {:style => 'width: 400px;'} %>
+        <% if @settings[:ip_whitelist].nil? || !@settings[:ip_whitelist].respond_to?('join') %>
+          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist], {style: 'width: 400px;'} %>
         <% else %>
-          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist].join(','), {:multiple => 'multiple', :style => 'width: 400px;'} %>
+          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist].join(','), {multiple: true, style: 'width: 400px;'} %>
         <% end %>
       </label>
     </p>
   </fieldset>
 </div>
 
-<%= render :file => File.join(File.dirname(__FILE__), "_rmplus_logo.html.erb") %>
+<%= render file: File.join(File.dirname(__FILE__), '_rmplus_logo.html.erb') %>
