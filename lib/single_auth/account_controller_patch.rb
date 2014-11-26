@@ -42,30 +42,23 @@ module SingleAuth
         user_groups_whitelist = Setting.plugin_single_auth[:user_groups_whitelist] || []
         debug_mode = Setting.plugin_single_auth[:enable_sms_debug_mode] || false
 
-        if enable_sms_auth
-          if user.respond_to?("user_phones")
-            if (user.groups.map{|group| group.id.to_s} & user_groups_whitelist).count == 0
-              if !intranet_domains.include?(request.domain) || !ip_whitelist.include?(request.remote_ip)
-                if user.user_phones.where(:phone_type => 'cell').any?
-                  token = Token.new(:user => user, :action => 'enter_sms_code')
-                  if token.save
-                    logger.debug("<<< Login attempt: two-factor authentification required >>>")
-                    logger.debug("    domain=#{request.domain}")
-                    logger.debug("    ip=#{request.remote_ip}")
-                    redirect_to :controller => 'account', :action => 'enter_sms_code', :token => token.value
-                  end
-                else
-                  flash.now[:error] = l(:label_no_user_phone)
-                end
-              else
-                successful_authentication_without_ldap_single_auth(user)
-              end
-            else
-              successful_authentication_without_ldap_single_auth(user)
+        if enable_sms_auth && user.respond_to?('user_phones') &&
+          (user.groups.map{|group| group.id.to_s} & user_groups_whitelist).count == 0 &&
+          (!intranet_domains.include?(request.domain) || !ip_whitelist.include?(request.remote_ip))
+
+          if user.user_phones.where(phone_type: 'cell').any?
+            token = Token.new(user: user, action: 'enter_sms_code')
+            if token.save
+              logger.debug("<<< Login attempt: two-factor authentification required >>>")
+              logger.debug("    domain=#{request.domain}")
+              logger.debug("    ip=#{request.remote_ip}")
+              redirect_to controller: 'account', action: 'enter_sms_code', token: token.value
             end
+
           else
-            successful_authentication_without_ldap_single_auth(user)
+            flash.now[:error] = l(:label_no_user_phone)
           end
+
         else
           successful_authentication_without_ldap_single_auth(user)
         end
@@ -83,7 +76,7 @@ module SingleAuth
           if request.get?
             (redirect_to(home_url); return) unless Setting.plugin_single_auth[:enable_sms_auth]
 
-            cell_phone = @user.user_phones.where(:phone_type => 'cell').first
+            cell_phone = @user.user_phones.where(phone_type: 'cell').first
             unless cell_phone.nil? || cell_phone.phone.empty?
               time = Time.now
               @user.otp_code(time)
@@ -114,11 +107,11 @@ module SingleAuth
                 successful_authentication_without_ldap_single_auth(@user)
               else
                 flash[:error] = l(:label_incorrect_sms_code)
-                redirect_to :controller => 'account', :action => 'enter_sms_code', :token => @token.value
+                redirect_to controller: 'account', action: 'enter_sms_code', token: @token.value
               end
             else
               flash[:error] = l(:label_no_sms_code)
-              redirect_to :controller => 'account', :action => 'enter_sms_code', :token => @token.value
+              redirect_to controller: 'account', action: 'enter_sms_code', token: @token.value
             end
           end
         else
@@ -132,9 +125,9 @@ module SingleAuth
         username = Setting.plugin_single_auth[:sms_bot_login]
         password = Setting.plugin_single_auth[:sms_bot_password]
         phone_number = cell_phone.phone.gsub(/[\+\s]/, '')
-        message = l(:label_sms_message, :code => user.otp_code)
+        message = l(:label_sms_message, code: user.otp_code)
 
-        data = {:username => username, :password => password, :data => {:to => [phone_number], :body => message}}
+        data = {username: username, password: password, data: {to: [phone_number], body: message}}
 
         sms_url = Setting.plugin_single_auth[:sms_url]
 

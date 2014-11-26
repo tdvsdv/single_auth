@@ -17,7 +17,7 @@ module SingleAuth
     module InstanceMethods
       def plugin_with_single_auth
         plugin_without_single_auth
-        if request.post? && @plugin.id == "single_auth"
+        if request.post? && @plugin.id == 'single_auth'
           token_valid_time = params[:settings][:token_valid_time]
           redef_without_warning(ROTP, :DEFAULT_INTERVAL, token_valid_time.to_i)
         end

@@ -60,13 +60,13 @@ module SingleAuth
               user_sync = LdapUsersSync::LdapSyncUser.new(self, ldap_connection, true)
               new_user = user_sync.update_or_create(entry, LdapUsersSync::LdapSyncUser.object_guid_to_s(entry['objectGUID']))
             else
-              new_user = User.create( { :login => remote_username,
-                                        :firstname => entry[auth_source.attr_firstname].first.to_s,
-                                        :lastname => entry[auth_source.attr_lastname].first.to_s,
-                                        :mail => entry[auth_source.attr_mail].first.to_s,
-                                        :language => Setting.default_language,
-                                        :mail_notification => Setting.default_notification_option,
-                                        :auth_source_id => auth_source.id } )
+              new_user = User.create( { login: remote_username,
+                                        firstname: entry[auth_source.attr_firstname].first.to_s,
+                                        lastname: entry[auth_source.attr_lastname].first.to_s,
+                                        mail: entry[auth_source.attr_mail].first.to_s,
+                                        language: Setting.default_language,
+                                        mail_notification: Setting.default_notification_option,
+                                        auth_source_id: auth_source.id } )
             end
           end
         end
@@ -93,12 +93,8 @@ module SingleAuth
       end
 
       def update_autologout_time
-        if User.current.logged?
-          if User.current.tfa_login
-            unless User.current.login_expired?
+        if User.current.logged? && User.current.tfa_login && !User.current.login_expired?
               User.current.set_auto_logout_time
-            end
-          end
         end
       end
 
