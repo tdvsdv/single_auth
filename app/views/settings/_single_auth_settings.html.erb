@@ -24,7 +24,7 @@
     </label>
   </fieldset>
 
-  <fieldset style="width: 65%;">
+  <fieldset>
     <legend><strong><%= l(:label_screensaver) %></strong></legend>
     <label for="settings_enable_screensaver">
       <%= check_box_tag 'settings[enable_screensaver]', true, @settings[:enable_screensaver] %> &mdash; <%= l(:settings_enable_screensaver) %>
@@ -35,12 +35,12 @@
     </label>
   </fieldset>
 
-  <fieldset style="width: 65%;">
+  <fieldset>
     <p><strong><%= l(:label_singleauth_settings_warning) %></strong></p>
     <legend><strong><%= l(:label_singleauth_settings_sms) %></strong></legend>
     <label for="settings_sms_url">
       <%= l(:label_sms_url) %>:
-      <%= text_field_tag 'settings[sms_url]', @settings[:sms_url], :style => 'width: 250px;' %>
+      <%= text_field_tag 'settings[sms_url]', @settings[:sms_url], style: 'width: 250px;' %>
     </label>
     <label for="settings_sms_bot_login">
       <%= l(:label_sms_bot_login) %>:
@@ -55,7 +55,7 @@
     </label>
   </fieldset>
 
-  <fieldset style="width: 65%;">
+  <fieldset>
     <legend><strong><%= l(:label_tfa) %></strong></legend>
     <label for="settings_enable_sms_auth">
       <%= check_box_tag 'settings[enable_sms_auth]', true, @settings[:enable_sms_auth] %> &mdash; <%= l(:settings_enable_sms_auth) %>
@@ -65,7 +65,7 @@
       <% if @settings[:intranet_domains].nil? || !@settings['intranet_domains'].respond_to?('join') %>
         <%= text_field_tag 'settings[intranet_domains][]', '', {multiple: 'multiple'} %>
       <% else %>
-        <%= text_field_tag 'settings[intranet_domains][]', @settings[:intranet_domains].join(','), {multiple: 'multiple', style: 'width: 400px;'} %>
+        <%= text_field_tag 'settings[intranet_domains][]', @settings[:intranet_domains].join(','), { multiple: 'multiple', style: 'width: 400px;' } %>
       <% end %>
     </label>
     <label for="settings_token_valid_time">
@@ -90,9 +90,9 @@
       <label for="settings_ip_whitelist_">
         <%= l(:settings_ip_whitelist) %>:
         <% if @settings[:ip_whitelist].nil? || !@settings[:ip_whitelist].respond_to?('join') %>
-          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist], {style: 'width: 400px;'} %>
+          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist], { style: 'width: 400px;' } %>
         <% else %>
-          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist].join(','), {multiple: true, style: 'width: 400px;'} %>
+          <%= text_field_tag 'settings[ip_whitelist][]', @settings[:ip_whitelist].join(','), { multiple: true, style: 'width: 400px;' } %>
         <% end %>
       </label>
     </p>
