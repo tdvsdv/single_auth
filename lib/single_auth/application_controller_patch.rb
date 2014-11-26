@@ -30,6 +30,7 @@ module SingleAuth
         Token.delete_all(["user_id = ? AND action = ?", User.current.id, 'tfa_login'])
       end
 
+
       def find_current_user_with_ldap_single_auth
         current_user = find_current_user_without_ldap_single_auth
         if current_user.nil? && request.env[Setting.plugin_single_auth['server_env_var']]
@@ -40,6 +41,7 @@ module SingleAuth
         current_user
       end
 
+
       def try_login_by_remote_env(remote_username)
         user = User.active.find_by_login remote_username
         if user.nil?
@@ -48,6 +50,7 @@ module SingleAuth
 
         user if !session[:logout_was] && do_login(user)
       end
+
 
       def add_user_by_ldap_info(remote_username)
         auth_source = get_auth_source
@@ -60,13 +63,16 @@ module SingleAuth
               user_sync = LdapUsersSync::LdapSyncUser.new(self, ldap_connection, true)
               new_user = user_sync.update_or_create(entry, LdapUsersSync::LdapSyncUser.object_guid_to_s(entry['objectGUID']))
             else
-              new_user = User.create( { login: remote_username,
-                                        firstname: entry[auth_source.attr_firstname].first.to_s,
-                                        lastname: entry[auth_source.attr_lastname].first.to_s,
-                                        mail: entry[auth_source.attr_mail].first.to_s,
-                                        language: Setting.default_language,
-                                        mail_notification: Setting.default_notification_option,
-                                        auth_source_id: auth_source.id } )
+              Rails.logger.debug "creating user via STD #{remote_username}"
+              new_user = User.new
+              new_user.login = remote_username
+              new_user.firstname = entry[auth_source.attr_firstname].first.to_s
+              new_user.lastname = entry[auth_source.attr_lastname].first.to_s
+              new_user.mail = entry[auth_source.attr_mail].first.to_s
+              new_user.language = Setting.default_language
+              new_user.mail_notification = Setting.default_notification_option
+              new_user.auth_source_id = auth_source.id
+              new_user.save
             end
           end
         end
@@ -83,6 +89,7 @@ module SingleAuth
         end
       end
 
+
       def tfa_logout
         if User.current.logged?
           if User.current.tfa_login && (User.current.logout_time.nil? || User.current.login_expired?)
@@ -91,6 +98,7 @@ module SingleAuth
           end
         end
       end
+
 
       def update_autologout_time
         if User.current.logged? && User.current.tfa_login && !User.current.login_expired?
