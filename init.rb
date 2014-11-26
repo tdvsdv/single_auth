@@ -1,21 +1,19 @@
 require 'redmine'
 
 Redmine::Plugin.register :single_auth do
-  name 'Single authentification plugin'
+  name 'Redmine SSO plugin'
   author 'Pitin Vladimir Vladimirovich'
-  author_url 'http://pitin.su'
-  url 'http://github.com/AdamLantos/redmine_http_auth' if respond_to?(:url)
+  author_url 'http://rmplus.pro'
+  url 'http://rmplus.pro/plugins/single_auth'
   description 'A plugin for doing single one authentification and synhronize users and groups with LDAP'
-  version '1.0'
+  version '1.1'
 
-  settings :partial => 'settings/single_auth_settings',
-    :default => {
-      'server_env_var' => 'REMOTE_USER',
-      'logout_timeout' => 60,
-      'intranet_domains' => ['rm.local', 'redmine.local'],
-      'token_valid_time' => 6*60,
-      'screensaver_timeout' => 60
-      }
+  settings partial: 'settings/single_auth_settings',
+           default: { 'server_env_var' => 'REMOTE_USER',
+                      'logout_timeout' => 60,
+                      'intranet_domains' => ['rm.local', 'redmine.local'],
+                      'token_valid_time' => 360,
+                      'screensaver_timeout' => 60 }
 end
 
 Rails.application.config.to_prepare do
