@@ -3,7 +3,7 @@
 #### Plugin for Redmine
 [apache]: http://httpd.apache.org/
 [ntlm]: http://modntlm.sourceforge.net/
-[plugin]: http://rmplus.pro/redmine/plugins/single_auth
+[plugin]: http://rmplus.pro/en/redmine/plugins/single_auth
 
 Plugin implements SSO authentication method in Redmine.
 
