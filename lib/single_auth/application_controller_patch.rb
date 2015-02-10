@@ -43,6 +43,7 @@ module SingleAuth
 
 
       def try_login_by_remote_env(remote_username)
+        remote_username = remote_username.to_s.split('@')[0]
         user = User.active.find_by_login remote_username
         if user.nil?
           user = add_user_by_ldap_info(remote_username)
